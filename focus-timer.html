@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오늘의 집중 - 포모도로 타이머</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Taku, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.9em;
+        }
+
+        .motivation-quote {
+            text-align: center;
+            font-style: italic;
+            color: #764ba2;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(118, 75, 162, 0.1);
+            border-radius: 10px;
+        }
+
+        .timer-display {
+            font-size: 5em;
+            text-align: center;
+            color: #333;
+            margin: 30px 0;
+            font-weight: 300;
+            letter-spacing: 5px;
+        }
+
+        .session-type {
+            text-align: center;
+            font-size: 1.2em;
+            color: #667eea;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .start-btn {
+            background: #667eea;
+            color: white;
+        }
+
+        .start-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .reset-btn {
+            background: #e0e0e0;
+            color: #666;
+        }
+
+        .reset-btn:hover {
+            background: #d0d0d0;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 15px;
+            color: white;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.8em;
+            opacity: 0.9;
+        }
+
+        .goal-input {
+            margin-bottom: 30px;
+        }
+
+        .goal-input input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border 0.3s;
+        }
+
+        .goal-input input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .sound-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .sound-btn {
+            padding: 10px 20px;
+            background: rgba(102, 126, 234, 0.1);
+            border: 2px solid #667eea;
+            color: #667eea;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .sound-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .progress-ring {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .progress-ring svg {
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring circle {
+            fill: none;
+            stroke-width: 8;
+        }
+
+        .progress-ring .background {
+            stroke: #e0e0e0;
+        }
+
+        .progress-ring .progress {
+            stroke: #667eea;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s linear;
+        }
+
+        @media (max-width: 600px) {
+            .timer-display {
+                font-size: 3.5em;
+            }
+            
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⏰ 오늘의 집중</h1>
+        <p class="subtitle">포모도로 기법으로 생산성을 높이세요</p>
+        
+        <div class="motivation-quote" id="quote">
+            "집중력은 근육과 같다. 훈련할수록 강해진다."
+        </div>
+
+        <div class="goal-input">
+            <input type="text" id="goalInput" placeholder="오늘의 집중 목표를 입력하세요...">
+        </div>
+
+        <div class="session-type" id="sessionType">집중 시간</div>
+
+        <div class="timer-display" id="timer">25:00</div>
+
+        <div class="controls">
+            <button class="start-btn" id="startBtn" onclick="toggleTimer()">시작</button>
+            <button class="reset-btn" onclick="resetTimer()">초기화</button>
+        </div>
+
+        <div class="sound-controls">
+            <button class="sound-btn" onclick="setSound('none')">소리 없음</button>
+            <button class="sound-btn active" onclick="setSound('rain')">빗소리</button>
+            <button class="sound-btn" onclick="setSound('cafe')">카페</button>
+            <button class="sound-btn" onclick="setSound('forest')">숲속</button>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="completedSessions">0</div>
+                <div class="stat-label">완료 세션</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalMinutes">0</div>
+                <div class="stat-label">집중 시간(분)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="streak">0</div>
+                <div class="stat-label">연속 일수</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let timeLeft = 25 * 60; // 25 minutes in seconds
+        let isRunning = false;
+        let interval;
+        let isBreak = false;
+        let completedSessions = 0;
+        let totalMinutes = 0;
+        let currentSound = 'rain';
+
+        const quotes = [
+            "집중력은 근육과 같다. 훈련할수록 강해진다.",
+            "한 번에 한 가지 일에만 집중하라.",
+            "성공의 비결은 집중이다.",
+            "집중은 천재성의 비밀이다.",
+            "모든 위대한 성취는 집중에서 시작된다.",
+            "방해받지 않는 시간이 가장 생산적이다."
+        ];
+
+        // Load saved data
+        function loadData() {
+            const saved = localStorage.getItem('focusTimerData');
+            if (saved) {
+                const data = JSON.parse(saved);
+                completedSessions = data.completedSessions || 0;
+                totalMinutes = data.totalMinutes || 0;
+                document.getElementById('completedSessions').textContent = completedSessions;
+                document.getElementById('totalMinutes').textContent = totalMinutes;
+                
+                // Check streak
+                const lastDate = data.lastDate;
+                const today = new Date().toDateString();
+                if (lastDate === today) {
+                    document.getElementById('streak').textContent = data.streak || 0;
+                } else if (isYesterday(lastDate)) {
+                    document.getElementById('streak').textContent = data.streak || 0;
+                } else {
+                    document.getElementById('streak').textContent = 0;
+                }
+            }
+        }
+
+        function isYesterday(dateString) {
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            return yesterday.toDateString() === dateString;
+        }
+
+        function saveData() {
+            const data = {
+                completedSessions,
+                totalMinutes,
+                lastDate: new Date().toDateString(),
+                streak: parseInt(document.getElementById('streak').textContent)
+            };
+            localStorage.setItem('focusTimerData', JSON.stringify(data));
+        }
+
+        function updateDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function toggleTimer() {
+            const btn = document.getElementById('startBtn');
+            if (isRunning) {
+                isRunning = false;
+                clearInterval(interval);
+                btn.textContent = '계속';
+            } else {
+                isRunning = true;
+                btn.textContent = '일시정지';
+                interval = setInterval(() => {
+                    if (timeLeft > 0) {
+                        timeLeft--;
+                        updateDisplay();
+                    } else {
+                        completeSession();
+                    }
+                }, 1000);
+            }
+        }
+
+        function completeSession() {
+            clearInterval(interval);
+            isRunning = false;
+            
+            // Play completion sound
+            playCompletionSound();
+            
+            if (!isBreak) {
+                completedSessions++;
+                totalMinutes += 25;
+                document.getElementById('completedSessions').textContent = completedSessions;
+                document.getElementById('totalMinutes').textContent = totalMinutes;
+                
+                // Update streak
+                const currentStreak = parseInt(document.getElementById('streak').textContent);
+                document.getElementById('streak').textContent = currentStreak + 1;
+                
+                saveData();
+                
+                // Switch to break
+                isBreak = true;
+                timeLeft = 5 * 60;
+                document.getElementById('sessionType').textContent = '휴식 시간';
+                document.getElementById('startBtn').textContent = '시작';
+                alert('🎉 잘하셨습니다! 5분 휴식하세요.');
+            } else {
+                // Switch back to focus
+                isBreak = false;
+                timeLeft = 25 * 60;
+                document.getElementById('sessionType').textContent = '집중 시간';
+                document.getElementById('startBtn').textContent = '시작';
+                alert('✨ 휴식 완료! 다시 집중할 시간입니다.');
+                
+                // Change quote
+                const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+                document.getElementById('quote').textContent = randomQuote;
+            }
+            
+            updateDisplay();
+        }
+
+        function resetTimer() {
+            clearInterval(interval);
+            isRunning = false;
+            isBreak = false;
+            timeLeft = 25 * 60;
+            document.getElementById('timer').textContent = '25:00';
+            document.getElementById('startBtn').textContent = '시작';
+            document.getElementById('sessionType').textContent = '집중 시간';
+        }
+
+        function setSound(sound) {
+            currentSound = sound;
+            document.querySelectorAll('.sound-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        function playCompletionSound() {
+            // Create a simple beep using Web Audio API
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = 800;
+            oscillator.type = 'sine';
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.5);
+        }
+
+        // Save goal to localStorage
+        document.getElementById('goalInput').addEventListener('change', (e) => {
+            localStorage.setItem('todayGoal', e.target.value);
+        });
+
+        // Load goal
+        const savedGoal = localStorage.getItem('todayGoal');
+        if (savedGoal) {
+            document.getElementById('goalInput').value = savedGoal;
+        }
+
+        // Initialize
+        loadData();
+        updateDisplay();
+
+        // Change quote every minute when not running
+        setInterval(() => {
+            if (!isRunning) {
+                const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+                document.getElementById('quote').textContent = randomQuote;
+            }
+        }, 60000);
+    </script>
+</body>
+</html>

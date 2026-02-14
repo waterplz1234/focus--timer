@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="포모도로 기법으로 집중력을 높이세요. 25분 집중 타이머, 통계 추적, 동기부여 명언 제공.">
+    <meta name="keywords" content="포모도로, 타이머, 집중력, 생산성, 시간관리, 공부, 업무">
+    <meta property="og:title" content="오늘의 집중 - 포모도로 타이머">
+    <meta property="og:description" content="25분 집중 + 5분 휴식으로 생산성을 극대화하세요">
+    <meta property="og:type" content="website">
+    <title>오늘의 집중 - 포모도로 타이머 | 집중력 향상 웹앱</title>
+    
+    <!-- Google Analytics (나중에 추가) -->
+    <!-- Google tag (gtag.js)
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+    -->
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* AdSense 배너 영역 */
+        .ad-banner {
+            width: 100%;
+            max-width: 728px;
+            height: 90px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.9em;
+        }
+
+        .motivation-quote {
+            text-align: center;
+            font-style: italic;
+            color: #764ba2;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(118, 75, 162, 0.1);
+            border-radius: 10px;
+        }
+
+        .timer-display {
+            font-size: 5em;
+            text-align: center;
+            color: #333;
+            margin: 30px 0;
+            font-weight: 300;
+            letter-spacing: 5px;
+        }
+
+        .session-type {
+            text-align: center;
+            font-size: 1.2em;
+            color: #667eea;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .start-btn {
+            background: #667eea;
+            color: white;
+        }
+
+        .start-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .start-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .reset-btn {
+            background: #e0e0e0;
+            color: #666;
+        }
+
+        .reset-btn:hover {
+            background: #d0d0d0;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 15px;
+            color: white;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.8em;
+            opacity: 0.9;
+        }
+
+        .goal-input {
+            margin-bottom: 30px;
+        }
+
+        .goal-input input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border 0.3s;
+        }
+
+        .goal-input input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .sound-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .sound-btn {
+            padding: 10px 20px;
+            background: rgba(102, 126, 234, 0.1);
+            border: 2px solid #667eea;
+            color: #667eea;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .sound-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .premium-notice {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 10px;
+            border: 2px dashed #ffd700;
+        }
+
+        .premium-notice h3 {
+            color: #f39c12;
+            margin-bottom: 10px;
+        }
+
+        .premium-btn {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            border: none;
+            font-weight: 600;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .premium-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(243, 156, 18, 0.4);
+        }
+
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            color: white;
+            font-size: 0.9em;
+        }
+
+        footer a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .timer-display {
+                font-size: 3.5em;
+            }
+            
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .ad-banner {
+                height: 50px;
+                font-size: 0.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Ad Banner -->
+    <div class="ad-banner">
+        <!-- Google AdSense 광고 코드가 여기에 들어갑니다 -->
+        <span>광고 영역 (Google AdSense)</span>
+    </div>
+
+    <div class="container">
+        <h1>⏰ 오늘의 집중</h1>
+        <p class="subtitle">포모도로 기법으로 생산성을 높이세요</p>
+        
+        <div class="motivation-quote" id="quote">
+            "집중력은 근육과 같다. 훈련할수록 강해진다."
+        </div>
+
+        <div class="goal-input">
+            <input type="text" id="goalInput" placeholder="오늘의 집중 목표를 입력하세요...">
+        </div>
+
+        <div class="session-type" id="sessionType">집중 시간</div>
+
+        <div class="timer-display" id="timer">25:00</div>
+
+        <div class="controls">
+            <button class="start-btn" id="startBtn" onclick="toggleTimer()">시작</button>
+            <button class="reset-btn" onclick="resetTimer()">초기화</button>
+        </div>
+
+        <div class="sound-controls">
+            <button class="sound-btn" onclick="setSound('none')">소리 없음</button>
+            <button class="sound-btn active" onclick="setSound('rain')">🌧️ 빗소리</button>
+            <button class="sound-btn" onclick="setSound('cafe')">☕ 카페</button>
+            <button class="sound-btn premium-locked" onclick="showPremiumNotice()">🌲 숲속 (프리미엄)</button>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="completedSessions">0</div>
+                <div class="stat-label">완료 세션</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalMinutes">0</div>
+                <div class="stat-label">집중 시간(분)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="streak">0</div>
+                <div class="stat-label">연속 일수</div>
+            </div>
+        </div>
+
+        <!-- Premium Notice -->
+        <div class="premium-notice" style="display: none;" id="premiumNotice">
+            <h3>✨ 프리미엄 기능</h3>
+            <p>더 많은 배경음악, 커스텀 테마, 고급 통계를 이용하세요!</p>
+            <button class="premium-btn" onclick="upgradeToPremium()">월 $2.99로 업그레이드</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>Made with ❤️ for better focus</p>
+        <p>
+            <a href="#about">소개</a> | 
+            <a href="#privacy">개인정보처리방침</a> | 
+            <a href="#contact">문의하기</a>
+        </p>
+    </footer>
+
+    <script>
+        let timeLeft = 25 * 60;
+        let isRunning = false;
+        let interval;
+        let isBreak = false;
+        let completedSessions = 0;
+        let totalMinutes = 0;
+        let currentSound = 'rain';
+
+        const quotes = [
+            "집중력은 근육과 같다. 훈련할수록 강해진다.",
+            "한 번에 한 가지 일에만 집중하라.",
+            "성공의 비결은 집중이다.",
+            "집중은 천재성의 비밀이다.",
+            "모든 위대한 성취는 집중에서 시작된다.",
+            "방해받지 않는 시간이 가장 생산적이다.",
+            "깊은 집중은 얕은 노력 100번보다 낫다.",
+            "시작이 반이다. 지금 시작하세요!",
+        ];
+
+        // Google Analytics 이벤트 트래킹
+        function trackEvent(category, action, label) {
+            if (typeof gtag !== 'undefined') {
+                gtag('event', action, {
+                    'event_category': category,
+                    'event_label': label
+                });
+            }
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('focusTimerData');
+            if (saved) {
+                const data = JSON.parse(saved);
+                completedSessions = data.completedSessions || 0;
+                totalMinutes = data.totalMinutes || 0;
+                document.getElementById('completedSessions').textContent = completedSessions;
+                document.getElementById('totalMinutes').textContent = totalMinutes;
+                
+                const lastDate = data.lastDate;
+                const today = new Date().toDateString();
+                if (lastDate === today) {
+                    document.getElementById('streak').textContent = data.streak || 0;
+                } else if (isYesterday(lastDate)) {
+                    const newStreak = (data.streak || 0) + 1;
+                    document.getElementById('streak').textContent = newStreak;
+                } else {
+                    document.getElementById('streak').textContent = 0;
+                }
+            }
+        }
+
+        function isYesterday(dateString) {
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            return yesterday.toDateString() === dateString;
+        }
+
+        function saveData() {
+            const data = {
+                completedSessions,
+                totalMinutes,
+                lastDate: new Date().toDateString(),
+                streak: parseInt(document.getElementById('streak').textContent)
+            };
+            localStorage.setItem('focusTimerData', JSON.stringify(data));
+        }
+
+        function updateDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Update page title
+            document.title = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} - 오늘의 집중`;
+        }
+
+        function toggleTimer() {
+            const btn = document.getElementById('startBtn');
+            if (isRunning) {
+                isRunning = false;
+                clearInterval(interval);
+                btn.textContent = '계속';
+                trackEvent('Timer', 'pause', 'User paused timer');
+            } else {
+                isRunning = true;
+                btn.textContent = '일시정지';
+                trackEvent('Timer', 'start', isBreak ? 'Break started' : 'Focus started');
+                interval = setInterval(() => {
+                    if (timeLeft > 0) {
+                        timeLeft--;
+                        updateDisplay();
+                    } else {
+                        completeSession();
+                    }
+                }, 1000);
+            }
+        }
+
+        function completeSession() {
+            clearInterval(interval);
+            isRunning = false;
+            
+            playCompletionSound();
+            
+            if (!isBreak) {
+                completedSessions++;
+                totalMinutes += 25;
+                document.getElementById('completedSessions').textContent = completedSessions;
+                document.getElementById('totalMinutes').textContent = totalMinutes;
+                
+                const currentStreak = parseInt(document.getElementById('streak').textContent);
+                document.getElementById('streak').textContent = currentStreak;
+                
+                saveData();
+                trackEvent('Session', 'complete', 'Focus session completed');
+                
+                isBreak = true;
+                timeLeft = 5 * 60;
+                document.getElementById('sessionType').textContent = '휴식 시간 🎉';
+                document.getElementById('startBtn').textContent = '시작';
+                
+                // Show notification if supported
+                if ('Notification' in window && Notification.permission === 'granted') {
+                    new Notification('오늘의 집중', {
+                        body: '🎉 잘하셨습니다! 5분 휴식하세요.',
+                        icon: '⏰'
+                    });
+                }
+            } else {
+                isBreak = false;
+                timeLeft = 25 * 60;
+                document.getElementById('sessionType').textContent = '집중 시간';
+                document.getElementById('startBtn').textContent = '시작';
+                trackEvent('Session', 'complete', 'Break completed');
+                
+                if ('Notification' in window && Notification.permission === 'granted') {
+                    new Notification('오늘의 집중', {
+                        body: '✨ 휴식 완료! 다시 집중할 시간입니다.',
+                        icon: '⏰'
+                    });
+                }
+                
+                const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+                document.getElementById('quote').textContent = randomQuote;
+            }
+            
+            updateDisplay();
+            document.title = '오늘의 집중 - 포모도로 타이머';
+        }
+
+        function resetTimer() {
+            clearInterval(interval);
+            isRunning = false;
+            isBreak = false;
+            timeLeft = 25 * 60;
+            document.getElementById('timer').textContent = '25:00';
+            document.getElementById('startBtn').textContent = '시작';
+            document.getElementById('sessionType').textContent = '집중 시간';
+            document.title = '오늘의 집중 - 포모도로 타이머';
+            trackEvent('Timer', 'reset', 'User reset timer');
+        }
+
+        function setSound(sound) {
+            currentSound = sound;
+            document.querySelectorAll('.sound-btn:not(.premium-locked)').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            trackEvent('Sound', 'change', sound);
+        }
+
+        function showPremiumNotice() {
+            document.getElementById('premiumNotice').style.display = 'block';
+            trackEvent('Premium', 'interest', 'Clicked premium feature');
+        }
+
+        function upgradeToPremium() {
+            alert('프리미엄 구독 기능은 곧 출시됩니다! 이메일을 남겨주시면 출시 소식을 알려드리겠습니다.');
+            trackEvent('Premium', 'click', 'Upgrade button clicked');
+            // 실제로는 결제 페이지로 이동
+        }
+
+        function playCompletionSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = 800;
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.5);
+            } catch (e) {
+                console.log('Audio playback not supported');
+            }
+        }
+
+        document.getElementById('goalInput').addEventListener('change', (e) => {
+            localStorage.setItem('todayGoal', e.target.value);
+            trackEvent('Goal', 'set', 'User set daily goal');
+        });
+
+        const savedGoal = localStorage.getItem('todayGoal');
+        if (savedGoal) {
+            document.getElementById('goalInput').value = savedGoal;
+        }
+
+        // Request notification permission
+        if ('Notification' in window && Notification.permission === 'default') {
+            setTimeout(() => {
+                Notification.requestPermission();
+            }, 3000);
+        }
+
+        // Initialize
+        loadData();
+        updateDisplay();
+
+        // Change quote periodically
+        setInterval(() => {
+            if (!isRunning) {
+                const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+                document.getElementById('quote').textContent = randomQuote;
+            }
+        }, 60000);
+
+        // Show premium notice after user completes 3 sessions
+        setInterval(() => {
+            if (completedSessions >= 3 && completedSessions % 5 === 0) {
+                document.getElementById('premiumNotice').style.display = 'block';
+            }
+        }, 10000);
+    </script>
+</body>
+</html>

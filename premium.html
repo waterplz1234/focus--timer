@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프리미엄 구독 - 오늘의 집중</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 30px;
+            padding: 50px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        .pricing-options {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .pricing-option {
+            flex: 1;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .pricing-option:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+        }
+
+        .pricing-option.selected {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .price {
+            font-size: 2.5em;
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .period {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .savings {
+            background: #4caf50;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            display: inline-block;
+        }
+
+        .features {
+            list-style: none;
+            margin-bottom: 40px;
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        .features li {
+            padding: 12px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .features li:last-child {
+            border-bottom: none;
+        }
+
+        .features li:before {
+            content: "✓ ";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        #card-element {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        #card-errors {
+            color: #e74c3c;
+            margin-bottom: 20px;
+            min-height: 20px;
+        }
+
+        .subscribe-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 18px;
+            width: 100%;
+            font-size: 1.2em;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .subscribe-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .subscribe-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .security-note {
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 20px;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-link a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✨ 프리미엄 구독</h1>
+        <p class="subtitle">더 나은 집중 경험을 위해 업그레이드하세요</p>
+
+        <div class="pricing-options">
+            <div class="pricing-option" onclick="selectPlan('monthly')" id="monthly-option">
+                <div class="price">₩2,900</div>
+                <div class="period">/ 월</div>
+            </div>
+            <div class="pricing-option selected" onclick="selectPlan('yearly')" id="yearly-option">
+                <div class="price">₩29,000</div>
+                <div class="period">/ 연</div>
+                <div class="savings">17% 절약!</div>
+            </div>
+        </div>
+
+        <ul class="features">
+            <li>무제한 포모도로 세션</li>
+            <li>20+ 프리미엄 배경음악</li>
+            <li>광고 완전 제거</li>
+            <li>커스텀 타이머 시간 설정</li>
+            <li>클라우드 동기화</li>
+            <li>다크모드 & 커스텀 테마</li>
+            <li>고급 통계 리포트</li>
+            <li>우선 고객 지원</li>
+        </ul>
+
+        <form id="payment-form">
+            <div id="card-element"></div>
+            <div id="card-errors"></div>
+            
+            <button type="submit" class="subscribe-button" id="submit-button">
+                구독 시작하기
+            </button>
+        </form>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>결제 처리 중...</p>
+        </div>
+
+        <p class="security-note">🔒 Stripe를 통한 안전한 결제</p>
+        <div class="back-link">
+            <a href="focus-timer-pro.html">← 무료 버전으로 돌아가기</a>
+        </div>
+    </div>
+
+    <script>
+        // Stripe 초기화
+        // 실제 사용 시 여기에 실제 Publishable Key를 입력해야 합니다
+        // const stripe = Stripe('pk_test_YOUR_PUBLISHABLE_KEY');
+        
+        // 데모용 코드
+        let selectedPlan = 'yearly';
+        
+        function selectPlan(plan) {
+            selectedPlan = plan;
+            document.querySelectorAll('.pricing-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.getElementById(plan + '-option').classList.add('selected');
+        }
+
+        // 실제 Stripe 통합 코드 (Stripe 계정 생성 후 사용)
+        /*
+        const elements = stripe.elements();
+        const cardElement = elements.create('card', {
+            style: {
+                base: {
+                    fontSize: '16px',
+                    color: '#32325d',
+                    fontFamily: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif',
+                    '::placeholder': {
+                        color: '#aab7c4'
+                    }
+                },
+                invalid: {
+                    color: '#e74c3c'
+                }
+            }
+        });
+
+        cardElement.mount('#card-element');
+
+        cardElement.on('change', function(event) {
+            const displayError = document.getElementById('card-errors');
+            if (event.error) {
+                displayError.textContent = event.error.message;
+            } else {
+                displayError.textContent = '';
+            }
+        });
+
+        const form = document.getElementById('payment-form');
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const submitButton = document.getElementById('submit-button');
+            const loading = document.getElementById('loading');
+            
+            submitButton.disabled = true;
+            submitButton.textContent = '처리 중...';
+            loading.style.display = 'block';
+
+            // 서버에 결제 인텐트 생성 요청
+            const response = await fetch('/create-subscription', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    plan: selectedPlan
+                })
+            });
+
+            const {clientSecret} = await response.json();
+
+            // 결제 확인
+            const {error, paymentIntent} = await stripe.confirmCardPayment(clientSecret, {
+                payment_method: {
+                    card: cardElement,
+                }
+            });
+
+            if (error) {
+                document.getElementById('card-errors').textContent = error.message;
+                submitButton.disabled = false;
+                submitButton.textContent = '구독 시작하기';
+                loading.style.display = 'none';
+            } else {
+                if (paymentIntent.status === 'succeeded') {
+                    // 성공!
+                    window.location.href = '/success.html';
+                }
+            }
+        });
+        */
+
+        // 데모용 버튼 핸들러
+        document.getElementById('payment-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            alert('데모 모드입니다.\n\n실제 결제를 위해서는:\n1. Stripe 계정 생성 (stripe.com)\n2. API 키 발급\n3. 서버 백엔드 구축\n\n자세한 내용은 STRIPE_GUIDE.md를 참고하세요.');
+        });
+    </script>
+</body>
+</html>

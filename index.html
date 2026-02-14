@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="무료 포모도로 타이머로 집중력을 높이세요. 25분 집중, 5분 휴식으로 생산성을 극대화하세요.">
+    <meta name="keywords" content="포모도로, 타이머, 집중력, 생산성, 시간관리, 무료, 웹앱">
+    <title>오늘의 집중 - 무료 포모도로 타이머</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 100px 20px;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            animation: fadeInUp 1s;
+        }
+
+        .hero p {
+            font-size: 1.5em;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            animation: fadeInUp 1s 0.2s both;
+        }
+
+        .cta-button {
+            background: white;
+            color: #667eea;
+            padding: 20px 50px;
+            font-size: 1.3em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            animation: fadeInUp 1s 0.4s both;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+
+        .hero-stats {
+            margin-top: 60px;
+            display: flex;
+            gap: 50px;
+            animation: fadeInUp 1s 0.6s both;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 1em;
+            opacity: 0.8;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 20px;
+            background: #f9f9f9;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 60px;
+            color: #333;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .feature-card p {
+            color: #666;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 100px 20px;
+            background: white;
+        }
+
+        .how-it-works h2 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 60px;
+            color: #333;
+        }
+
+        .steps {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .step {
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            font-weight: bold;
+            margin: 0 auto 20px;
+        }
+
+        .step h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 100px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .testimonials h2 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 60px;
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+        }
+
+        /* Pricing */
+        .pricing {
+            padding: 100px 20px;
+            background: #f9f9f9;
+        }
+
+        .pricing h2 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 60px;
+            color: #333;
+        }
+
+        .pricing-cards {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .pricing-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            flex: 1;
+            min-width: 280px;
+            text-align: center;
+        }
+
+        .pricing-card.featured {
+            border: 3px solid #667eea;
+            transform: scale(1.05);
+        }
+
+        .plan-name {
+            font-size: 1.8em;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .plan-price {
+            font-size: 3em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .plan-features li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .plan-features li:before {
+            content: "✓ ";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .plan-button {
+            background: #667eea;
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .plan-button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        /* CTA Section */
+        .final-cta {
+            padding: 100px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .final-cta h2 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        .final-cta p {
+            font-size: 1.3em;
+            margin-bottom: 40px;
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        footer a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5em;
+            }
+            
+            .hero p {
+                font-size: 1.2em;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>⏰ 오늘의 집중</h1>
+        <p>포모도로 기법으로 생산성을 2배로 높이세요</p>
+        <a href="focus-timer-pro.html" class="cta-button">무료로 시작하기 →</a>
+        
+        <div class="hero-stats">
+            <div class="stat">
+                <div class="stat-number">25분</div>
+                <div class="stat-label">최적의 집중 시간</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">무료로 사용</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">0초</div>
+                <div class="stat-label">설치 시간</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <h2>왜 오늘의 집중인가?</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">⏱️</div>
+                <h3>과학적 검증</h3>
+                <p>포모도로 기법은 수십년간 검증된 시간관리 방법입니다. 25분 집중, 5분 휴식으로 최고의 효율을 만드세요.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>진행상황 추적</h3>
+                <p>완료한 세션, 총 집중 시간, 연속 일수를 한눈에 확인하세요. 당신의 성장을 시각적으로 경험하세요.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎵</div>
+                <h3>집중 사운드</h3>
+                <p>빗소리, 카페 소음, 숲속 자연의 소리로 더 깊은 집중에 빠져보세요. 당신만의 완벽한 환경을 만드세요.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💡</div>
+                <h3>동기부여 명언</h3>
+                <p>매 세션마다 새로운 동기부여 명언이 당신을 응원합니다. 지칠 때마다 힘을 얻으세요.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>어디서나 사용</h3>
+                <p>PC, 태블릿, 스마트폰 어디서든 브라우저만 있으면 OK. 설치도 회원가입도 필요 없습니다.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔔</div>
+                <h3>알림 기능</h3>
+                <p>세션이 끝나면 자동으로 알려드립니다. 놓칠 걱정 없이 리듬에 맞춰 움직이세요.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <h2>사용 방법</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>목표 설정</h3>
+                <p>오늘 집중할 목표를 입력하세요</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>타이머 시작</h3>
+                <p>25분 동안 한 가지에만 집중하세요</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>휴식 취하기</h3>
+                <p>5분간 완전히 쉬며 재충전하세요</p>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <h3>반복하기</h3>
+                <p>4세트 후 15-30분 긴 휴식을 취하세요</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <h2>사용자 후기</h2>
+        <div class="testimonial-grid">
+            <div class="testimonial">
+                <div class="testimonial-text">
+                    "시험 기간 동안 이 앱으로 하루 8시간 집중이 가능했어요. 성적이 확실히 올랐습니다!"
+                </div>
+                <div class="testimonial-author">- 대학생 김○○</div>
+            </div>
+            <div class="testimonial">
+                <div class="testimonial-text">
+                    "재택근무하면서 집중력이 떨어졌는데, 포모도로 타이머로 업무 효율이 2배 늘었어요."
+                </div>
+                <div class="testimonial-author">- 개발자 이○○</div>
+            </div>
+            <div class="testimonial">
+                <div class="testimonial-text">
+                    "간단하고 예쁜 디자인이 마음에 들어요. 복잡한 기능 없이 딱 필요한 것만 있어서 좋습니다."
+                </div>
+                <div class="testimonial-author">- 프리랜서 박○○</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing">
+        <h2>요금제</h2>
+        <div class="pricing-cards">
+            <div class="pricing-card">
+                <div class="plan-name">무료</div>
+                <div class="plan-price">₩0</div>
+                <ul class="plan-features">
+                    <li>무제한 포모도로 세션</li>
+                    <li>기본 통계</li>
+                    <li>3가지 배경음</li>
+                    <li>동기부여 명언</li>
+                    <li>로컬 데이터 저장</li>
+                </ul>
+                <button class="plan-button" onclick="location.href='focus-timer-pro.html'">시작하기</button>
+            </div>
+            
+            <div class="pricing-card featured">
+                <div class="plan-name">프리미엄</div>
+                <div class="plan-price">₩2,900<span style="font-size:0.3em">/월</span></div>
+                <ul class="plan-features">
+                    <li>무료 플랜 모든 기능</li>
+                    <li>20+ 프리미엄 사운드</li>
+                    <li>광고 제거</li>
+                    <li>커스텀 타이머 시간</li>
+                    <li>클라우드 동기화</li>
+                    <li>다크모드 & 테마</li>
+                    <li>고급 통계 리포트</li>
+                </ul>
+                <button class="plan-button">곧 출시!</button>
+            </div>
+            
+            <div class="pricing-card">
+                <div class="plan-name">팀</div>
+                <div class="plan-price">₩9,900<span style="font-size:0.3em">/월</span></div>
+                <ul class="plan-features">
+                    <li>프리미엄 모든 기능</li>
+                    <li>팀 대시보드</li>
+                    <li>팀원 생산성 추적</li>
+                    <li>공유 집중 방</li>
+                    <li>관리자 기능</li>
+                    <li>우선 지원</li>
+                </ul>
+                <button class="plan-button">문의하기</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <h2>오늘부터 시작하세요</h2>
+        <p>가입도, 설치도 필요 없습니다. 지금 바로 집중의 힘을 경험하세요.</p>
+        <a href="focus-timer-pro.html" class="cta-button">무료로 시작하기 →</a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 오늘의 집중. All rights reserved.</p>
+        <div style="margin-top: 20px;">
+            <a href="#about">소개</a>
+            <a href="#privacy">개인정보처리방침</a>
+            <a href="#terms">이용약관</a>
+            <a href="#contact">문의하기</a>
+        </div>
+        <div style="margin-top: 20px;">
+            <a href="https://twitter.com" target="_blank">Twitter</a>
+            <a href="https://instagram.com" target="_blank">Instagram</a>
+            <a href="https://github.com" target="_blank">GitHub</a>
+        </div>
+    </footer>
+
+    <script>
+        // Simple analytics tracking
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'page_view', {
+                page_title: 'Landing Page',
+                page_location: window.location.href
+            });
+        }
+    </script>
+</body>
+</html>
